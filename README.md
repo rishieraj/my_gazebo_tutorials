@@ -1,6 +1,6 @@
-# ROS2 Beginner Tutorials
+# ROS2 Gazebo Tutorials
 
-This branch contains a C++ package that can run a ROS2 publisher and subscriber communicating a custom message.
+This branch contains a C++ package that can run a ROS2 node to control a Turtlebot Waffle in a custom world.
 
 **Author:** Rishie Raj (120425554)
 
@@ -9,6 +9,8 @@ It is assumed that the user has ROS2 Humble installed in their local system and 
  - `ament_cmake`: Required for ROS2 build system integration.
  - `rclcpp`: Used for creating nodes and communication between them.
  - `std_msgs`: Provides standard message types used in ROS2.
+ - `geometry_msgs`: Provides geometry type messages for ROS2.
+ - `sensor_msgs`: Provides message type for sensors like LIDAR.
 
 ### Building the Code
 
@@ -18,74 +20,41 @@ source /opt/ros/humble/setup.bash
 mkdir -p ~/ros2_ws/src
 # Go to the source directory of your ros2 workspace
 cd ~/ros2_ws/src
-#Clone the repository
-git clone git@github.com:rishieraj/my_beginner_tutorials.git
-#Go back to the ws directory
+# Clone the repository
+git clone git@github.com:rishieraj/my_gazebo_tutorials.git
+# Go back to the ws directory
 cd ~/ros2_ws
 # Install rosdep dependencies before building the package
 rosdep install -i --from-path src --rosdistro humble -y
 # Build the package using colcon build
-colcon build --packages-select beginner_tutorials
+colcon build --packages-select walker
 # After successfull build source the package
 source install/setup.bash
-
-# Run the publisher in terminal#1
-ros2 run beginner_tutorials talker
-# Run the subscriber in terminal#2 (Split the terminal and source ROS2 and the workspace setup.bash)
-ros2 run beginner_tutorials listener 
+# Launch the walker node in terminal
+ros2 launch walker walker_world.launch.py
 ```
 
-### Launching the Pub and Sub Nodes
+### Checking ROS2 Bag Functionality
 
-In order to initiate the publisher and subscriber node together using a launch file, the following command can be run on the terminal after sourcing the package. It accepts an argument `publish_frequency` whose value can be initialized by the user.
-
-```bash
-ros2 launch beginner_tutorials launch.py publish_frequency:=1000
-```
-
-### Launching Pub along with Rosbag
-
-In order to launch the nodes along with `rosbag`, the following command needs to be run with the parameter flag
-```bash
-ros2 launch beginner_tutorials launch.py publish_frequency:=1000 enable_recording:=true
-```
-
-### Calling the Service
-
-A service has been added to the talker node that can change the output string of the talker based on user input. The service can be called using the following command:
+The ROS2 Bag functionality is checked by capturing the messages while running the nodes. It can be recorded by running the following codes
 
 ```bash
-ros2 service call /change_string beginner_tutorials/srv/ChangeStr "{new_string: User Input}"
-```
-
-### Replaying Rosbag Topic Info
-In order for the Rosbag talker recodings to be replayed so that the listener can pick them up, the following commands can be run in sequence.  
-Open a fresh terminal and source the overlay as below:
-```bash
+# Source the overlay in a new terminal window
 source /opt/ros/humble/setup.bash
 # Go back to the ws directory
 cd ~/ros2_ws
 # After successfull build source the package
 source install/setup.bash
-# Run the subscriber node
-ros2 run beginner_tutorials listener
+# Launch the walker node in terminal
+ros2 launch walker walker_world.launch.py ros2_bag_start:=true
 ```
+
 Then in another terminal, run the following
 ```bash
 # Source the package
 source install/setup.bash
-# Play the rosbag recording
-ros2 bag play ./src/beginner_tutorials/results/rosbag2_2024_11_15-20_12_53
-```
-On returning to the listener terminal, it can be seen that the listener picks up the topic recordings of the talker.
-
-### Running Integration Tests using Catch2
-In order to check the results of the integration test, the following commands need to be run in sequence. In a new terminal
-```bash
-# Source the package
-source install/setup.bash
-# Run the test
-colcon test --packages-select beginner_tutorials
-# Display the output
-cat log/latest_test/integration_test/stdout_stderr.log
+# Inspect the ros2 bag
+ros2 bag info walkerbag
+# Play back the contents of the ros2 bag
+ros2 bag play walkerbag
 ```
