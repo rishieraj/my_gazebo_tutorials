@@ -4,9 +4,9 @@
  * @brief Header file for the walker node
  * @version 0.1
  * @date 2024-11-23
- * 
+ *
  * @copyright Copyright (c) 2024
- * 
+ *
  */
 #pragma once
 
@@ -20,7 +20,7 @@ class Walker;
 
 /**
  * @brief Class to define the state of the robot
- * 
+ *
  */
 class RobotState {
  public:
@@ -30,7 +30,7 @@ class RobotState {
 
 /**
  * @brief Class to move the robot forward
- * 
+ *
  */
 class MovingForward : public RobotState {
   void execute(Walker &context, float min_distance) override;
@@ -38,7 +38,7 @@ class MovingForward : public RobotState {
 
 /**
  * @brief Class to rotate the robot clockwise
- * 
+ *
  */
 class RotatingClockwise : public RobotState {
   void execute(Walker &context, float min_distance) override;
@@ -46,7 +46,7 @@ class RotatingClockwise : public RobotState {
 
 /**
  * @brief Class to rotate the robot counter clockwise
- * 
+ *
  */
 class RotatingCounterClockwise : public RobotState {
   void execute(Walker &context, float min_distance) override;
@@ -54,7 +54,7 @@ class RotatingCounterClockwise : public RobotState {
 
 /**
  * @brief Class to control the robot
- * 
+ *
  */
 class Walker : public rclcpp::Node {
  public:

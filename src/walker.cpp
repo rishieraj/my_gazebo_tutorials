@@ -1,12 +1,12 @@
 /**
  * @file walker.cpp
- * @author your name (you@domain.com)
+ * @author Rishie Raj
  * @brief Implementation file for the walker node
  * @version 0.1
  * @date 2024-11-23
- * 
+ *
  * @copyright Copyright (c) 2024
- * 
+ *
  */
 #include "walker/walker.hpp"
 
